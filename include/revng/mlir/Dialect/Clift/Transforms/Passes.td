@@ -24,17 +24,24 @@ def CliftImportModel : Clift_Pass<"import-model", "mlir::ModuleOp"> {
   let constructor = "mlir::clift::createImportModelPass()";
 }
 
+def CliftImportLLVM : Clift_Pass<"import-llvm", "mlir::ModuleOp"> {
+  let summary = "";
+  let constructor = "mlir::clift::createImportLLVMPass()";
+
+  let options = [
+    Option<"LLVMIRPath", "llvm", "std::string", /*default*/"\"\"", "LLVM IR Path">
+  ];
+}
+
 def CliftVerifyC : Clift_Pass<"verify-c", "mlir::ModuleOp"> {
   let summary = "Verify that the Clift semantics correspond to C semantics " #
                 "in the specified target implementation.";
   let constructor = "mlir::clift::createVerifyCPass()";
-  let dependentDialects = ["clift::CliftDialect"];
 }
 
-def CliftEmitC : Pass<"emit-c", "mlir::ModuleOp"> {
+def CliftEmitC : Clift_Pass<"emit-c", "mlir::ModuleOp"> {
   let summary = "Emit C code (optionally with PTML tags) from the Clift code.";
   let constructor = "mlir::clift::createEmitCPass()";
-  let dependentDialects = ["clift::CliftDialect"];
 
   let options = [
     Option<"Tagless", "tagless", "bool", /*default=*/"false", "Emit without PTML tags">,

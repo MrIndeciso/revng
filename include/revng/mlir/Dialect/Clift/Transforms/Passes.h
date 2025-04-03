@@ -13,6 +13,7 @@ namespace mlir::clift {
 
 std::unique_ptr<OperationPass<mlir::ModuleOp>> createModelAnalysis();
 std::unique_ptr<OperationPass<mlir::ModuleOp>> createImportModelPass();
+std::unique_ptr<OperationPass<mlir::ModuleOp>> createImportLLVMPass();
 std::unique_ptr<OperationPass<mlir::ModuleOp>> createVerifyCPass();
 std::unique_ptr<OperationPass<mlir::ModuleOp>> createEmitCPass();
 
