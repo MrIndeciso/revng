@@ -512,7 +512,7 @@ private:
 
     uint64_t Index = getConstantInt(Call->getArgOperand(1));
     auto Struct = mlir::cast<StructType>(Aggregate.getType());
-    llvm::errs() << *Call << "\n";
+    //llvm::errs() << *Call << "\n";
     revng_assert(Index < Struct.getFields().size());
     mlir::Type ResultType = Struct.getFields()[Index].getType();
 
@@ -889,9 +889,9 @@ private:
 
       const auto *ModelCallType = getCallSitePrototype(Model, I);
       auto Layout = abi::FunctionType::Layout::make(*ModelCallType);
-      llvm::errs() << *I << "\n";
-      llvm::errs() << "  RM=" << (int)Layout.returnMethod() << "\n";
-      llvm::errs() << "  SPTAR=" << (int)Layout.hasSPTAR() << "\n";
+      //llvm::errs() << *I << "\n";
+      //llvm::errs() << "  RM=" << (int)Layout.returnMethod() << "\n";
+      //llvm::errs() << "  SPTAR=" << (int)Layout.hasSPTAR() << "\n";
 
       auto CallType = importModelType<clift::FunctionType>(*ModelCallType);
 

@@ -13,6 +13,9 @@ namespace mlir::clift {
 #include "revng/mlir/Dialect/Clift/Transforms/Passes.h.inc"
 
 std::unique_ptr<OperationPass<mlir::ModuleOp>> createImportLLVMPass();
+std::unique_ptr<OperationPass<clift::ModuleOp>> createLoopDetectionPass();
+std::unique_ptr<OperationPass<clift::ModuleOp>> createBranchEqualizationPass();
+std::unique_ptr<OperationPass<clift::ModuleOp>> createBeautifyPass();
 std::unique_ptr<OperationPass<clift::ModuleOp>> createVerifyCPass();
 std::unique_ptr<OperationPass<clift::ModuleOp>> createEmitCPass();
 

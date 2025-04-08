@@ -21,6 +21,25 @@ def CliftImportLLVM : Clift_Pass<"import-llvm", "mlir::ModuleOp"> {
   ];
 }
 
+// TODO: Act on clift::FunctionOp
+def CliftLoopDetection : Clift_Pass<"loop-detection", "clift::ModuleOp"> {
+  let summary = "Detect Clift loops";
+  let constructor = "mlir::clift::createLoopDetectionPass()";
+}
+
+// TODO: Act on clift::FunctionOp
+def CliftBranchEqualization : Clift_Pass<"branch-equalization",
+                                         "clift::ModuleOp"> {
+  let summary = "Equalize Clift branches";
+  let constructor = "mlir::clift::createBranchEqualizationPass()";
+}
+
+// TODO: Act on clift::FunctionOp
+def CliftBeautify : Clift_Pass<"beautify", "clift::ModuleOp"> {
+  let summary = "Beautify Clift";
+  let constructor = "mlir::clift::createBeautifyPass()";
+}
+
 def CliftVerifyC : Clift_Pass<"verify-c", "clift::ModuleOp"> {
   let summary = "Verify that the Clift semantics correspond to C semantics " #
                 "in the specified target implementation.";

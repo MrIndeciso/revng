@@ -5,6 +5,11 @@
 add_mlir_dialect_library(
   MLIRCliftTransforms
   SHARED
+  Beautify/BranchEqualization.cpp
+  Beautify/Expressions.cpp
+  Beautify/LoopDetection.cpp
+  Beautify/Statements.cpp
+  Beautify.cpp
   CBackend.cpp
   CSemantics.cpp
   ImportLLVM.cpp
