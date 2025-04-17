@@ -12,6 +12,7 @@ namespace mlir::clift {
 #define GEN_PASS_DECL
 #include "revng/mlir/Dialect/Clift/Transforms/Passes.h.inc"
 
+std::unique_ptr<OperationPass<mlir::ModuleOp>> createImportModelPass();
 std::unique_ptr<OperationPass<mlir::ModuleOp>> createVerifyCPass();
 std::unique_ptr<OperationPass<mlir::ModuleOp>> createEmitCPass();
 
