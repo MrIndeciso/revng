@@ -7,6 +7,7 @@ add_mlir_dialect_library(
   SHARED
   CBackend.cpp
   CSemantics.cpp
+  ImportModel.cpp
   ModelOption.cpp
   DEPENDS
   LINK_LIBS

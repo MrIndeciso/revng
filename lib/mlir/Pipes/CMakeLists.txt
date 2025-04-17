@@ -1,5 +1,4 @@
-revng_add_analyses_library_internal(revngMLIRPipes MLIRContainer.cpp
-                                    ImportCliftTypesPipe.cpp)
+revng_add_analyses_library_internal(revngMLIRPipes MLIRContainer.cpp)
 
 target_link_libraries(
   revngMLIRPipes
