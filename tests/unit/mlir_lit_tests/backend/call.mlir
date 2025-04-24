@@ -2,7 +2,7 @@
 // This file is distributed under the MIT License. See LICENSE.md for details.
 //
 
-// RUN: %revngcliftopt %s --emit-c="tagless model=%S/model.yml" -o /dev/null | FileCheck %s
+// RUN: %revngcliftopt %s --model="path=%S/model.yml" --emit-c="tagless" -o /dev/null | FileCheck %s
 
 !int32_t = !clift.primitive<signed 4>
 

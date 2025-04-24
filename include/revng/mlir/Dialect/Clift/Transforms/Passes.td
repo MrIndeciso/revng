@@ -11,13 +11,17 @@ class Clift_Pass<string arg, string operation> : Pass<arg, operation> {
   let dependentDialects = ["clift::CliftDialect"];
 }
 
+def CliftModelAnalysis : Clift_Pass<"model", "mlir::ModuleOp"> {
+  let constructor = "mlir::clift::createModelAnalysis()";
+
+  let options = [
+    Option<"Path", "path", "std::string", /*default*/"\"\"", "Model YAML path">,
+  ];
+}
+
 def CliftImportModel : Clift_Pass<"import-model", "mlir::ModuleOp"> {
   let summary = "Import model types and add references to them in clift.undef ops";
   let constructor = "mlir::clift::createImportModelPass()";
-
-  let options = [
-    Option<"Model", "model", "mlir::clift::ModelOptionType", /*default=*/"nullptr", "Model path">
-  ];
 }
 
 def CliftVerifyC : Clift_Pass<"verify-c", "mlir::ModuleOp"> {
@@ -34,7 +38,6 @@ def CliftEmitC : Pass<"emit-c", "mlir::ModuleOp"> {
 
   let options = [
     Option<"Tagless", "tagless", "bool", /*default=*/"false", "Emit without PTML tags">,
-    Option<"Model", "model", "mlir::clift::ModelOptionType", /*default=*/"nullptr", "Model path">,
     Option<"Output", "output", "std::string", /*default*/"\"-\"", "C output path">
   ];
 }

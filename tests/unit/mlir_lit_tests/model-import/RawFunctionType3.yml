@@ -1,7 +1,7 @@
 #
 # This file is distributed under the MIT License. See LICENSE.md for details.
 #
-# RUN: %revngcliftopt /dev/null --import-model="model=%s" | FileCheck %s
+# RUN: %revngcliftopt /dev/null --model="path=%s" --import-model | FileCheck %s
 
 Architecture: x86_64
 TypeDefinitions:

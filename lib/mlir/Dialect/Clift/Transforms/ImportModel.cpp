@@ -10,6 +10,7 @@
 #include "mlir/Pass/PassRegistry.h"
 
 #include "revng/mlir/Dialect/Clift/IR/CliftOps.h"
+#include "revng/mlir/Dialect/Clift/Transforms/ModelAnalysis.h"
 #include "revng/mlir/Dialect/Clift/Transforms/Passes.h"
 #include "revng/mlir/Dialect/Clift/Utils/ImportModel.h"
 
@@ -43,6 +44,10 @@ static void importAllModelTypes(mlir::ModuleOp Module,
 using clift::impl::CliftImportModelBase;
 struct ImportModelPass : CliftImportModelBase<ImportModelPass> {
   void runOnOperation() override {
+    const model::Binary *Model = clift::getModel(getPassState());
+    if (Model == nullptr)
+      return signalPassFailure();
+
     importAllModelTypes(getOperation(), *Model);
   };
 };
