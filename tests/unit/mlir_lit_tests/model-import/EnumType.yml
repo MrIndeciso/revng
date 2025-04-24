@@ -6,7 +6,7 @@
 # input line. The angle brackets are matched separately in order to ignore
 # parameters other than those explicitly being checked for.
 #
-# RUN: %revngcliftopt /dev/null --import-model="model=%s" | FileCheck %s
+# RUN: %revngcliftopt /dev/null --model="path=%s" --import-model | FileCheck %s
 
 Architecture: x86_64
 

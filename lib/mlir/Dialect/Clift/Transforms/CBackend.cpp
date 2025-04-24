@@ -11,6 +11,7 @@
 
 #include "revng/ADT/SharedOnceFlag.h"
 #include "revng/TypeNames/PTMLCTypeBuilder.h"
+#include "revng/mlir/Dialect/Clift/Transforms/ModelAnalysis.h"
 #include "revng/mlir/Dialect/Clift/Transforms/Passes.h"
 #include "revng/mlir/Dialect/Clift/Utils/CBackend.h"
 #include "revng/mlir/Dialect/Clift/Utils/ImportModel.h"
@@ -50,6 +51,10 @@ struct EmitCPass : clift::impl::CliftEmitCBase<EmitCPass> {
 
     auto File = tryOpenOutputFile(Output);
     if (not File)
+      return signalPassFailure();
+
+    const model::Binary *Model = clift::getModel(getPassState());
+    if (Model == nullptr)
       return signalPassFailure();
 
     clift::TargetCImplementation Target = {
