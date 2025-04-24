@@ -9,6 +9,7 @@
 #include "mlir/Pass/Pass.h"
 #include "mlir/Support/FileUtilities.h"
 
+#include "revng/ADT/SharedOnceFlag.h"
 #include "revng/TypeNames/PTMLCTypeBuilder.h"
 #include "revng/mlir/Dialect/Clift/Transforms/Passes.h"
 #include "revng/mlir/Dialect/Clift/Utils/CBackend.h"
@@ -26,57 +27,31 @@ namespace clift = mlir::clift;
 
 namespace {
 
-// This forces all accesses to the output file to be synchronised.
-template<typename T>
-class OutputFileWrapper {
-public:
-  OutputFileWrapper() = default;
-  OutputFileWrapper(const OutputFileWrapper &) = delete;
-  OutputFileWrapper &operator=(const OutputFileWrapper &) = delete;
-
-  template<typename CallableType>
-  decltype(auto) use(CallableType &&Callable) {
-    std::lock_guard Lock(Mutex);
-    return static_cast<CallableType &&>(Callable)(Value);
-  }
-
-private:
-  std::mutex Mutex;
-  T Value;
-};
-
 struct EmitCPass : clift::impl::CliftEmitCBase<EmitCPass> {
-  using OutputFilePtr = std::unique_ptr<llvm::ToolOutputFile>;
-  std::shared_ptr<OutputFileWrapper<OutputFilePtr>> OutputFile;
+  static std::unique_ptr<llvm::ToolOutputFile>
+  tryOpenOutputFile(llvm::StringRef Filename) {
+    std::string ErrorMessage;
+    auto File = mlir::openOutputFile(Filename, &ErrorMessage);
 
-  EmitCPass() :
-    OutputFile(std::make_shared<OutputFileWrapper<OutputFilePtr>>()) {}
+    if (File)
+      File->keep();
+    else
+      dbg << ErrorMessage << "\n";
 
-  bool tryOpenOutputFile() {
-    return OutputFile->use([&](auto &File) -> bool {
-      if (File == nullptr) {
-        std::string ErrorMessage;
-        File = mlir::openOutputFile(Output, &ErrorMessage);
-
-        if (File != nullptr) {
-          File->keep();
-        } else {
-          dbg << ErrorMessage << "\n";
-          signalPassFailure();
-        }
-      }
-      return File != nullptr;
-    });
-  }
-
-  void writeToOutputFile(llvm::StringRef Content) {
-    OutputFile->use([&](const auto &File) {
-      revng_assert(File != nullptr);
-      File->os() << Content << '\n';
-    });
+    return File;
   }
 
   void runOnOperation() override {
+    if (RunFlag.testAndSet()) {
+      dbg << "emit-c cannot be used on inputs containing multiple modules.";
+
+      return signalPassFailure();
+    }
+
+    auto File = tryOpenOutputFile(Output);
+    if (not File)
+      return signalPassFailure();
+
     clift::TargetCImplementation Target = {
       .PointerSize = 8,
       .IntegerTypes = {
@@ -87,18 +62,17 @@ struct EmitCPass : clift::impl::CliftEmitCBase<EmitCPass> {
       },
     };
 
-    if (not tryOpenOutputFile())
-      return;
-
     llvm::raw_null_ostream NullStream;
     ptml::CTypeBuilder B(NullStream, *Model, /* EnableTaglessMode = */ Tagless);
     B.collectInlinableTypes();
 
     getOperation()->walk([&](clift::FunctionOp Function) {
       if (not Function.isExternal())
-        writeToOutputFile(clift::decompile(Function, Target, B));
+        File->os() << clift::decompile(Function, Target, B) << '\n';
     });
   }
+
+  SharedOnceFlag RunFlag;
 };
 
 } // namespace
