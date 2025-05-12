@@ -13,6 +13,7 @@
 #include "revng/mlir/Dialect/Clift/Transforms/Passes.h"
 #include "revng/mlir/Dialect/Clift/Utils/CBackend.h"
 #include "revng/mlir/Dialect/Clift/Utils/ImportModel.h"
+#include "revng/Support/Debug.h"
 
 namespace mlir {
 namespace clift {
@@ -60,7 +61,7 @@ struct EmitCPass : clift::impl::CliftEmitCBase<EmitCPass> {
         if (File != nullptr) {
           File->keep();
         } else {
-          llvm::errs() << ErrorMessage << "\n";
+          dbg << ErrorMessage << "\n";
           signalPassFailure();
         }
       }
