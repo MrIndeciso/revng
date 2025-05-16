@@ -61,6 +61,11 @@ def CliftImmediateRadixDeduction : Clift_Pass<"deduce-immediate-radices",
   let constructor = "mlir::clift::createImmediateRadixDeductionPass()";
 }
 
+def CliftSwitchCaseRewrite : Clift_Pass<"switch-case-rewrite", "clift::ModuleOp"> {
+  let summary = "Rewrite simple switch cases as if-else statements";
+  let constructor = "mlir::clift::createSwitchCaseRewritePass()";
+}
+
 def CliftVerifyC : Clift_Pass<"verify-c", "mlir::ModuleOp"> {
   let summary = "Verify that the Clift semantics correspond to C semantics " #
                 "in the specified target implementation.";

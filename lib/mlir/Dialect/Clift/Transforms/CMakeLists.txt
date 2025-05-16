@@ -14,6 +14,7 @@ add_mlir_dialect_library(
   Beautify/ReturnConversion.cpp
   Beautify.cpp
   CSemantics.cpp
+  RewriteSwitchCases.cpp
   DEPENDS
   LINK_LIBS
   PUBLIC
