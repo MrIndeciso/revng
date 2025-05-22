@@ -66,6 +66,11 @@ def CliftSwitchCaseRewrite : Clift_Pass<"switch-case-rewrite", "clift::ModuleOp"
   let constructor = "mlir::clift::createSwitchCaseRewritePass()";
 }
 
+def CliftTightenVariableScopes : Clift_Pass<"tighten-variable-scopes", "clift::ModuleOp"> {
+  let summary = "Tighten variable scopes";
+  let constructor = "mlir::clift::createTightenVariableScopePass()";
+}
+
 def CliftVerifyC : Clift_Pass<"verify-c", "mlir::ModuleOp"> {
   let summary = "Verify that the Clift semantics correspond to C semantics " #
                 "in the specified target implementation.";
