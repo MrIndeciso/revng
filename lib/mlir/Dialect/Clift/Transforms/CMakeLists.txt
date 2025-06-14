@@ -13,9 +13,9 @@ add_mlir_dialect_library(
   Beautify/Statements.cpp
   Beautify/ReturnConversion.cpp
   Beautify/RewriteSwitchCases.cpp
+  Beautify/TightenVariableScopes.cpp
   Beautify.cpp
   CSemantics.cpp
-  TightenVariableScopes.cpp
   DEPENDS
   LINK_LIBS
   PUBLIC
